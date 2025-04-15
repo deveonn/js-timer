@@ -1,3 +1,3 @@
-### JS Timer
+#JS Timer
 
-- Make a JS timer to pratice javascript :)
+- This is a simple JS timer, just for pratice basic stuff.
