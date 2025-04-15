@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        font-family: "Press Start 2P", system-ui;
+        font-weight: 400;
+        font-style: normal;
+      }
+      html {
+        background-color: #222;
+        font-family: sans-serif;
+      }
+
+      main {
+        width: 100%;
+        max-width: 600px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        color: aqua;
+      }
+
+      h1 {
+        width: 100%;
+        text-align: center;
+      }
+
+      fieldset {
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        input {
+          width: 120px;
+          height: 80px;
+          font-size: 3rem;
+          border: 3px solid #00ffff;
+        }
+
+        input:disabled {
+            color:#00ffff;
+        }
+      }
+
+      .hours,
+      .minutes,
+      .seconds {
+        border: none;
+        background-color: transparent;
+      }
+
+      .hours,
+      .minutes,
+      .seconds::-moz-focus-inner {
+        border: none;
+        background-color: transparent;
+      }
+
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        cursor: pointer;
+        width: 60px;
+        height: 60px;
+      }
+
+      .ph:hover {
+        background-color: #00ffff;
+        color: rgb(34, 34, 34);
+      }
+
+      .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Timer</h1>
+      <fieldset>
+        <input type="text" class="hours" disabled/>
+        <p class="dots">:</p>
+        <input type="text" class="minutes" disabled/>
+        <p class="dots">:</p>
+        <input type="text" class="seconds" disabled/>
+      </fieldset>
+
+      <div class="buttons">
+        <i class="ph ph-pause" onclick="handleStopTimer()"></i>
+        <i class="ph ph-play" onclick="handleStartTimer()"></i>
+        <i
+          class="ph ph-arrow-counter-clockwise"
+          onclick="handleResetTimer()"
+        ></i>
+      </div>
+    </main>
+  </body>
+
+  <script>
+    const hours = document.querySelector(".hours");
+    const minutes = document.querySelector(".minutes");
+    const seconds = document.querySelector(".seconds");
+    const dots = document.querySelectorAll(".dots");
+
+    let incrementSeconds = 0;
+    let incrementMinutes = 0;
+    let incrementHours = 0;
+
+    let isGoing = false;
+
+    const setMinutes = () => {
+      minutes.value = `${(incrementMinutes += 1)}`.padStart(2, "0");
+    };
+
+    function startTimer() {
+      seconds.value = `${(incrementSeconds += 1)}`.padStart(2, "0");
+
+      if (incrementSeconds >= 59) {
+        incrementSeconds = -1;
+        setTimeout(setMinutes, 1000);
+      }
+    }
+
+    let timer;
+
+    const handleStartTimer = () => {
+      if (!isGoing) {
+        isGoing = true;
+
+        timer = setInterval(startTimer, 1000);
+      } else {
+        alert("Timer já está rodando");
+      }
+    };
+
+    function handleStopTimer() {
+      isGoing = false;
+
+      clearInterval(timer);
+    }
+
+    function handleResetTimer() {
+      incrementSeconds = 0;
+      incrementMinutes = 0;
+      incrementHours = 0;
+
+      seconds.value = "00";
+      minutes.value = "00";
+      hours.value = "00";
+    }
+
+    hours.value = "00";
+    minutes.value = "00";
+    seconds.value = "00";
+
+    const dotsInterval = setInterval(() => {
+      if (!isGoing) {
+        dots.forEach((dot) => {
+          if (dot.style.color === "rgb(34, 34, 34)") {
+            dot.style = "color: 00ffff;";
+          } else {
+            dot.style = "color: #222;";
+          }
+        });
+      }
+    }, 1000);
+  </script>
+</html>
